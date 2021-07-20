@@ -4,4 +4,7 @@
 <h3>{{project.title}}</h3>
 <hr>
 <p>{{project.description}}</p>
+{% for tag in tags %}
+    <span style='background-color:chocolate'>{{tag}}</span>
+{% endfor %}
 {% endblock content%}
