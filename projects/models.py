@@ -15,4 +15,4 @@ class Project(models.Model):
 class Reviews(models.Model):
     # owner
     # project
-    body=models.TextField(null=True,blank=null)
+    body=models.TextField(null=True,blank=True)
