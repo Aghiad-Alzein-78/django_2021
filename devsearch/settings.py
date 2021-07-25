@@ -125,10 +125,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+#this will point for static files inside app/templates/static 
 STATIC_URL = '/static/'
+
 MEDIA_URL='/images/'
 
-
+#adding STATICFILES_DIRS will make django look for other static files
+#outside apps and in the dirs of STATICFILES_DIRS
 STATICFILES_DIRS=[ 
     os.path.join(BASE_DIR,'static')
 ]
