@@ -2,7 +2,10 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+
 from .models import Profile
+
 # Create your views here.
 
 def profiles(request):
@@ -20,6 +23,7 @@ def userProfile(request,pk):
 
 
 def loginUser(request):
+    page="login"
     if request.user.is_authenticated:
         return  redirect("profiles")
     if request.method=="POST":
@@ -35,11 +39,22 @@ def loginUser(request):
             return redirect('profiles')
         else:
             messages.error(request,"Username OR password is incorrect") 
-    
-    return render(request,'users/login_register.html')
+    context={'page':page}
+    return render(request,'users/login_register.html',context)
 
 def logoutUser(request):
     logout(request)
     messages.info(request,"User was logged out")
     return redirect("login")
 
+def registerUser(request):
+    page="register"
+    form=UserCreationForm()
+    if request.method=="POST":
+        form=UserCreationForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+
+            return redirect('login')
+    context={'page':page,'form':form}
+    return render(request,'users/login_register.html',context)
