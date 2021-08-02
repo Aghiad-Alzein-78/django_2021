@@ -27,6 +27,11 @@ def deleteUser(sender,instance,**kwargs):
 def updateUser(sender,instance,created,**kwargs):
     profile=instance
     user=profile.user
+    user.first_name=profile.name
+    user.username=profile.username
+    user.email=profile.email
+
+
 #One way of connecting is to use connect function The other way is to use
 #the receiver decorator
 
