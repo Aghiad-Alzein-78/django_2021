@@ -5,7 +5,7 @@ from django.contrib import messages
 # from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm
 from .models import Profile
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def profiles(request):
@@ -13,14 +13,12 @@ def profiles(request):
     context = {'profiles':profiles}
     return render(request,'users/profiles.html',context)
 
-
 def userProfile(request,pk):
     profile=Profile.objects.get(id=pk)
     topSkills=profile.skill_set.exclude(description__exact="")
     otherSkills=profile.skill_set.filter(description="")
     context={'profile':profile,'topSkills':topSkills,'otherSkills':otherSkills}
     return render(request,'users/user-profile.html',context)
-
 
 def loginUser(request):
     page="login"
@@ -63,3 +61,12 @@ def registerUser(request):
             messages.error(request,"Invalid Entry...")
     context={'page':page,'form':form}
     return render(request,'users/login_register.html',context)
+
+@login_required(login_url="login")
+def userAccount(request):
+    profile=request.user.profile
+    skills=profile.skill_set.all()
+    projects=profile.project_set.all()
+    
+    context={'profile':profile,'skills':skills,'projects':projects}
+    return render(request,'users/account.html',context)
