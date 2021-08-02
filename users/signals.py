@@ -24,9 +24,12 @@ def deleteUser(sender,instance,**kwargs):
     if user!=None:
         user.delete()
 
-
+def updateUser(sender,instance,created,**kwargs):
+    profile=instance
+    user=profile.user
 #One way of connecting is to use connect function The other way is to use
 #the receiver decorator
 
 post_save.connect(createProfile,sender=User)
 post_delete.connect(deleteUser,sender=Profile)
+post_save.connect(updateUser,sender=Profile)
