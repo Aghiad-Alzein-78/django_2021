@@ -22,3 +22,10 @@ class profileForm(ModelForm):
     class Meta:
         model=Profile
         fields='__all__'
+        exclude=['user']
+
+    def __init__(self,*args,**kwargs):
+        super(profileForm,self).__init__(*args,**kwargs)
+        for name,field in self.fields.items():
+            field.widget.attrs.update({"class":"input input--text"})
+        

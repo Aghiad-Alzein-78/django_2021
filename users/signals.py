@@ -27,14 +27,15 @@ def deleteUser(sender,instance,**kwargs):
 def updateUser(sender,instance,created,**kwargs):
     profile=instance
     user=profile.user
-    user.first_name=profile.name
-    user.username=profile.username
-    user.email=profile.email
-
+    if created==False:
+        user.first_name=profile.name
+        user.username=profile.username
+        user.email=profile.email
+        user.save()
 
 #One way of connecting is to use connect function The other way is to use
 #the receiver decorator
 
 post_save.connect(createProfile,sender=User)
-post_delete.connect(deleteUser,sender=Profile)
 post_save.connect(updateUser,sender=Profile)
+post_delete.connect(deleteUser,sender=Profile)

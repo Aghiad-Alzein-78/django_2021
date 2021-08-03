@@ -56,7 +56,7 @@ def registerUser(request):
             user.save()
             messages.success(request,"Account was created ")
             login(request,user)
-            return redirect('profiles')
+            return redirect('edit-account')
         else:
             messages.error(request,"Invalid Entry...")
     context={'page':page,'form':form}
@@ -67,12 +67,17 @@ def userAccount(request):
     profile=request.user.profile
     skills=profile.skill_set.all()
     projects=profile.project_set.all()
-    
     context={'profile':profile,'skills':skills,'projects':projects}
     return render(request,'users/account.html',context)
 
 @login_required(login_url="login")
 def editAccount(request):
-    form=profileForm()
+    profile=request.user.profile
+    form=profileForm(instance=profile)
+    if request.method=="POST":
+        form=profileForm(request.POST,request.FILES,instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('account')
     context={'form':form}
     return render(request,'users/profile_form.html',context)
