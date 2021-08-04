@@ -3,7 +3,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 # from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm,profileForm
+from .forms import CustomUserCreationForm,profileForm,SkillForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -81,3 +81,32 @@ def editAccount(request):
             return redirect('account')
     context={'form':form}
     return render(request,'users/profile_form.html',context)
+
+@login_required(login_url="login")
+def createSkill(request):
+    form=SkillForm()
+    if request.method=="POST":
+        profile=request.user.profile
+        form=SkillForm(request.POST)
+        if form.is_valid():
+            skill=form.save(commit=False)
+            skill.owner=profile
+            skill.save()
+            return redirect('account')
+    context={'form':form}
+    return render(request,"users/skill_form.html",context)
+
+
+@login_required(login_url="login")
+def updateSkill(request,pk):
+    profile=request.user.profile
+    skill=profile.skill_set.get(id=pk)
+    form=SkillForm(instance=skill)
+    if request.method=="POST":
+        form=SkillForm(request.POST,instance=skill)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Skill updated")
+            return redirect('account')
+    context={'form':form}
+    return render(request,"users/skill_form.html",context)
