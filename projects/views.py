@@ -4,12 +4,23 @@ from .forms import ProjectForm
 from .models import Project
 from django.contrib.auth.decorators import login_required
 from .utils import searchProject
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 # Create your views here.
 
 
 def projects(request):
     projects,search_query=searchProject(request)
-    context = {'projects':projects,'search_query':search_query}
+    p=Paginator(projects,1000)
+    page=request.GET.get('page')
+    try:
+        projects=p.page(page)
+    except PageNotAnInteger:
+        page=1
+        projects=p.page(page)
+    except EmptyPage:
+        page=p.num_pages
+        projects=p.page(page)
+    context = {'projects':projects,'search_query':search_query,'paginator':p}
     return render(request,'projects/projects.html',context)
 
 

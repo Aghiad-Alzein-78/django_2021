@@ -3,6 +3,7 @@ import uuid
 
 from django.db.models.deletion import SET_NULL
 from users.models import Profile
+
 # Create your models here.
 class Project(models.Model):
     owner=models.ForeignKey(Profile,null=True,blank=True,on_delete=SET_NULL)
@@ -19,6 +20,11 @@ class Project(models.Model):
     
     def __str__(self):
         return self.title
+
+    # will return the results of a project always in date of created
+    #if we change created to be ["-created"]
+    class Meta:
+        ordering=['created']
 
 class Review(models.Model):
     VOTE_TYPE=(
