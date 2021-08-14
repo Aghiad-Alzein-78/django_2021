@@ -2,24 +2,20 @@
 <div class="pagination">
   <ul class="container">
     {% if querySet.has_previous %}
-      <a class="btn page-link" href="?page={{querySet.previous_page_number}}">&#10094; Prev</a>
+      <a class="btn page-link" href="?page={{querySet.previous_page_number}}" data-page={{querySet.previous_page_number}}>&#10094; Prev</a>
     {% endif %}
     {% for page in custom_range %}
         {% if page == querySet.number%}
-          <li><a class="btn btn--sub page-link" href="?page={{page}}">({{page}})</a></li>
+          <li><a class="btn btn--sub page-link" href="?page={{page}}" data-page={{page}}>{{page}}</a></li>
         {% else %}
-          <li><a class="btn page-link" href="?page={{page}}">{{page}}</a></li>
+          <li><a class="btn page-link" href="?page={{page}}" data-page={{page}}>{{page}}</a></li>
         {% endif %}
     {% endfor %}
     {% if querySet.has_next %}
-      <a class="btn page-link" href="?page={{querySet.next_page_number}}">Next &#10095;</a>
+      <a class="btn page-link" href="?page={{querySet.next_page_number}}" data-page={{querySet.next_page_number}}>Next &#10095;</a>
    
     {% endif %}
   </ul>
 </div>
 {% endif %}
 
-<script type="text/javascript">
-    let searchForm=document.querySelector("#searchForm")
-    let pageLinks=document.getElementsByClassName("page-link")
-</script>
