@@ -52,7 +52,7 @@
         </div>
       </div>
     </section>
-
+    {% include 'pagination.html' with querySet=profiles custom_range=custom_range %}
     
   </main>
 {% endblock %}
