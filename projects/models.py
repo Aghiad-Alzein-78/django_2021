@@ -24,14 +24,18 @@ class Project(models.Model):
     # will return the results of a project always in date of created
     #if we change created to be ["-created"]
     class Meta:
-        ordering=['created']
+        ordering=['-votes_ratio','-votes_total','title']
+
+    @property
+    def reviewers(self):
+       return self.review_set.all().values_list("owner__id",flat=True)
 
     @property
     def getVoteCount(self):
         reviews=self.review_set.all()
-        upVotes=reviews.filter(value="up")
+        upVotes=reviews.filter(value="up").count()
         totalVotes=reviews.count()
-        ratio=int((len(upVotes)/totalVotes)*100)
+        ratio=int(upVotes/totalVotes*100)
         self.votes_total=totalVotes
         self.votes_ratio=ratio
         self.save()

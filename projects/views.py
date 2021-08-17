@@ -31,7 +31,7 @@ def project(request,pk):
             messages.success(request,"review submitted ")
             projectobj.getVoteCount
             return redirect('project',pk=projectobj.id)
-   
+    print(projectobj.reviewers)
     context={'project':projectobj,'tags':tags,'reviews':reviews,'form':form}
     return render(request,'projects/single-project.html',context)
 
