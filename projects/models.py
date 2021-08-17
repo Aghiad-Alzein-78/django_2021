@@ -26,6 +26,19 @@ class Project(models.Model):
     class Meta:
         ordering=['created']
 
+    @property
+    def getVoteCount(self):
+        reviews=self.review_set.all()
+        upVotes=reviews.filter(value="up")
+        totalVotes=reviews.count()
+        ratio=int((len(upVotes)/totalVotes)*100)
+        self.votes_total=totalVotes
+        self.votes_ratio=ratio
+        self.save()
+
+
+
+
 class Review(models.Model):
     VOTE_TYPE=(
         ('up','Up Vote'),
@@ -43,6 +56,7 @@ class Review(models.Model):
 
     def __str__(self):
         return self.value
+    
 
 class Tag(models.Model):
     name=models.CharField(max_length=100)

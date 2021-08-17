@@ -27,11 +27,11 @@ def project(request,pk):
             review=form.save(commit=False)
             review.owner=request.user.profile
             review.project=projectobj
-            projectobj.votes_total+=1
             review.save()
             messages.success(request,"review submitted ")
+            projectobj.getVoteCount
             return redirect('project',pk=projectobj.id)
-    print(reviews)
+   
     context={'project':projectobj,'tags':tags,'reviews':reviews,'form':form}
     return render(request,'projects/single-project.html',context)
 
