@@ -3,8 +3,8 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 # from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm,profileForm,SkillForm
-from .models import Profile,Skill
+from .forms import CustomUserCreationForm,profileForm,SkillForm,MessageForm
+from .models import Profile,Skill,Message
 from django.contrib.auth.decorators import login_required
 from .utils import searchProfiles,paginateData
 # Create your views here.
@@ -128,3 +128,40 @@ def deleteSkill(request,pk):
         return redirect('account')
     context={'object':skill}
     return  render(request,"delete_template.html",context)
+
+@login_required(login_url='login')
+def inbox(request):
+    profile=request.user.profile
+    messagesRequests=profile.messages.all()
+    unreadCount=messagesRequests.filter(is_read=False).count()
+    context={'messagesRequests':messagesRequests,'unreadCount':unreadCount}
+    return render(request,'users/inbox.html',context)
+
+@login_required(login_url='login')
+def viewMessage(request,pk):
+    profile=request.user.profile
+    message=profile.messages.get(id=pk)
+    if message.is_read==False:
+        message.readMessage
+    context={'messageSent':message}
+    return render(request,'users/message.html',context)
+
+def createMessage(request,pk):
+    recepient=Profile.objects.get(id=pk)
+    form=MessageForm()
+    if request.method=='POST':
+        form=MessageForm(request.POST)
+        if form.is_valid():
+            message=form.save(commit=False)
+            message.recepient=recepient
+            if request.user.is_authenticated:
+                profile=request.user.profile
+                message.name=profile.name
+                message.sender=profile
+                message.email=profile.email
+            message.save()
+            messages.success(request,"Message Sent Successfully")
+            return redirect('user-profile',pk=recepient.id)
+
+    context={'recepient':recepient,'form':form}
+    return render(request,'users/message_form.html',context)

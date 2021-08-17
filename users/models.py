@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.deletion import CASCADE
+from django.db.models.deletion import CASCADE, SET_NULL
 import uuid
+from datetime import datetime
 
 
 class Profile(models.Model):
@@ -37,3 +38,27 @@ class Skill(models.Model):
 
 
 
+class Message(models.Model):
+    sender=models.ForeignKey(Profile,on_delete=SET_NULL,null=True,blank=True,default=None)
+    recepient=models.ForeignKey(Profile,on_delete=models.SET_NULL,null=True,blank=True,related_name='messages') 
+    name=models.CharField(max_length=200,null=True,blank=True)
+    email=models.EmailField(max_length=200,null=True,blank=True)
+    subject=models.CharField(max_length=200,null=True,blank=True)
+    body=models.TextField()
+    is_read=models.BooleanField(default=False,null=True)
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,unique=True)
+    created=models.DateTimeField(auto_now_add=True)
+    read=models.DateTimeField(null=True,blank=True)
+
+    def __str__(self):
+        return self.subject
+
+    class Meta:
+        ordering=['is_read','-created']
+
+    @property
+    def readMessage(self):
+        self.is_read=True
+        self.read=datetime.now()
+        self.save()
+        
