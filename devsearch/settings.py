@@ -120,7 +120,20 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+# Zoho Settings
+# EMAIL_HOST = 'smtp.zoho.com'
+# EMAIL_HOST_USER = 'myEmail@zohomail.com'
+# EMAIL_HOST_PASSWORD = 'my password'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
 
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_PORT=587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "myemail@gmail.com"
+# EMAIL_HOST_PASSWORD = 'gmail app password'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
